@@ -1,0 +1,32 @@
+body {
+    font-family: sans-serif;
+    margin: 20px;
+}
+
+#videoPlayer {
+    width: 80%;
+    max-width: 800px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+#controls button {
+    margin-right: 5px;
+    padding: 5px 10px;
+}
+
+#roomInfo {
+    margin-bottom: 15px;
+}
+
+#otherUserTimesContainer {
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+label,
+input,
+button {
+    margin-bottom: 10px;
+}

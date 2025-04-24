@@ -1,140 +1,217 @@
-const socket = io('http://26.92.20.182:3333');
+const socket = io("http://26.92.20.182:3333");
+const videoPlayer = document.getElementById("videoPlayer");
+const roomSelectionDiv = document.getElementById("roomSelection");
+const videoContainerDiv = document.getElementById("videoContainer");
+const joinRoomBtn = document.getElementById("joinRoomBtn");
+const roomNameInput = document.getElementById("roomName");
+const videoUrlInput = document.getElementById("videoUrl");
+const roomInfoP = document.getElementById("roomInfo");
+const otherUserTimesListDiv = document.getElementById("otherUserTimesList");
 
-const videoPlayer = document.getElementById('videoPlayer');
-const roomSelectionDiv = document.getElementById('roomSelection');
-const videoContainerDiv = document.getElementById('videoContainer');
-const joinRoomBtn = document.getElementById('joinRoomBtn');
-const roomNameInput = document.getElementById('roomName');
-const videoUrlInput = document.getElementById('videoUrl');
-const roomInfoP = document.getElementById('roomInfo');
+function formatTime(totalSeconds) {
+  if (isNaN(totalSeconds) || totalSeconds < 0) {
+    return "00:00";
+  }
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = Math.floor(totalSeconds % 60);
+  return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(
+    2,
+    "0"
+  )}`;
+}
 
 let currentRoom = null;
-let isSeeking = false; 
-let userTriggered = true; 
+let isSeeking = false;
+let isNotInAction = true;
+let timeUpdateInterval = null;
+const userTimeElements = {};
 
-joinRoomBtn.addEventListener('click', () => {
-    const room = roomNameInput.value.trim();
-    const videoUrl = videoUrlInput.value.trim();
+joinRoomBtn.addEventListener("click", () => {
+  const room = roomNameInput.value.trim();
+  const videoUrl = videoUrlInput.value.trim();
 
-    if (room && videoUrl) {
-        currentRoom = room;
-        videoPlayer.src = videoUrl; 
+  if (room && videoUrl) {
+    currentRoom = room;
+    videoPlayer.src = videoUrl;
 
-        roomSelectionDiv.style.display = 'none';
-        videoContainerDiv.style.display = 'block';
-        roomInfoP.textContent = `Đang ở trong phòng: ${currentRoom}`;
+    roomSelectionDiv.style.display = "none";
+    videoContainerDiv.style.display = "block";
+    roomInfoP.textContent = `Bạn đang ở Room: ${currentRoom}`;
 
-        socket.emit('joinRoom', currentRoom);
+    socket.emit("joinRoom", currentRoom);
 
-        setTimeout(() => {
-             socket.emit('requestSync', { room: currentRoom });
-        }, 1000); 
+    setTimeout(() => {
+      socket.emit("requestSync", { room: currentRoom });
+    }, 1000);
 
-    } else {
-        alert('Vui lòng nhập tên phòng và URL video hợp lệ.');
+    if (timeUpdateInterval) {
+      clearInterval(timeUpdateInterval);
     }
-});
 
-
-videoPlayer.addEventListener('play', () => {
-    if (!userTriggered) return; 
-    console.log('Bạn đã nhấn Play');
-    const currentTime = videoPlayer.currentTime;
-    socket.emit('play', { room: currentRoom, time: currentTime });
-});
-
-videoPlayer.addEventListener('pause', () => {
-    if (!isSeeking && userTriggered) {
-        console.log('Bạn đã nhấn Pause');
+    timeUpdateInterval = setInterval(() => {
+      if (currentRoom && videoPlayer.readyState > 0 && !videoPlayer.seeking) {
         const currentTime = videoPlayer.currentTime;
-        socket.emit('pause', { room: currentRoom, time: currentTime });
-    }
+        socket.emit("currentTimeUpdate", {
+          room: currentRoom,
+          time: currentTime,
+        });
+      }
+    }, 2000);
+  } else {
+    alert("Vui lòng nhập tên phòng và URL phim hợp lệ.");
+  }
 });
 
-videoPlayer.addEventListener('seeking', () => {
-    if (!userTriggered) return;
-    isSeeking = true;
-    console.log('Bạn đang tua video...');
-});
-
-videoPlayer.addEventListener('seeked', () => {
-    if (!userTriggered) return;
-    isSeeking = false;
+videoPlayer.addEventListener("play", () => {
+  if (isNotInAction) {
     const currentTime = videoPlayer.currentTime;
-    console.log('Bạn đã tua xong đến:', currentTime);
-    socket.emit('seek', { room: currentRoom, time: currentTime });
+    socket.emit("play", { room: currentRoom, time: currentTime });
+    console.log("Emit event Play");
+  }
 });
 
-socket.on('connect', () => {
-    console.log('Đã kết nối tới server Socket.IO:', socket.id);
+videoPlayer.addEventListener("pause", () => {
+  if (!isSeeking && isNotInAction) {
+    const currentTime = videoPlayer.currentTime;
+    socket.emit("pause", { room: currentRoom, time: currentTime });
+    console.log("Emit event Pause");
+  }
 });
 
-socket.on('disconnect', () => {
-    console.log('Đã mất kết nối tới server Socket.IO');
-    alert('Mất kết nối tới server!');
-    roomSelectionDiv.style.display = 'block';
-    videoContainerDiv.style.display = 'none';
-    currentRoom = null;
+videoPlayer.addEventListener("seeking", () => {
+  if (isNotInAction) {
+    isSeeking = true;
+    console.log("Đang tua video...");
+  }
 });
 
-socket.on('userJoined', (userId) => {
-    console.log(`Người dùng mới (${userId}) đã tham gia phòng.`);
+videoPlayer.addEventListener("seeked", () => {
+  if (isNotInAction) {
+    const currentTime = videoPlayer.currentTime;
+    socket.emit("seek", { room: currentRoom, time: currentTime });
+    console.log(`Bạn đã tua xong đến ${currentTime}, emit event seek`);
+  }
+  isSeeking = false;
 });
 
-
-socket.on('play', (time) => {
-    console.log('Nhận lệnh Play từ server tại:', time);
-    userTriggered = false; 
-    videoPlayer.currentTime = time; 
-    videoPlayer.play();
-    userTriggered = true; 
+socket.on("connect", () => {
+  console.log("Đã kết nối tới server Socket.IO:", socket.id);
 });
 
-socket.on('pause', (time) => {
-    console.log('Nhận lệnh Pause từ server tại:', time);
-    userTriggered = false; 
+socket.on("disconnect", () => {
+  alert("Mất kết nối tới server!");
+  roomSelectionDiv.style.display = "block";
+  videoContainerDiv.style.display = "none";
+  currentRoom = null;
+  isSeeking = false;
+  isNotInAction = true;
+});
+
+socket.on("userJoined", (userId) => {
+  console.log(`User với ID (${userId}) đã tham gia phòng.`);
+  if (!userTimeElements[userId] && otherUserTimesListDiv) {
+    const elementId = `user-time-${userId}`;
+    const userElement = document.createElement("p");
+    userElement.id = elementId;
+    userElement.textContent = `User ${userId.substring(0, 4)} at time: --:--`;
+    otherUserTimesListDiv.appendChild(userElement);
+    userTimeElements[userId] = userElement;
+  }
+});
+
+socket.on("play", (time) => {
+  isNotInAction = false;
+  videoPlayer.currentTime = time;
+  videoPlayer.play();
+  isNotInAction = true;
+  console.log("Nhận Event Play từ server tại thời điểm:", time);
+});
+
+socket.on("pause", (time) => {
+  isNotInAction = false;
+  videoPlayer.pause();
+  videoPlayer.currentTime = time;
+  isNotInAction = true;
+  console.log("Nhận Event Pause từ server tại thời điểm:", time);
+});
+
+socket.on("seek", (time) => {
+  if (Math.abs(videoPlayer.currentTime - time) < 0.5) {
+    console.log("ESCAPE FROM TARLOOP");
+    return;
+  }
+  isNotInAction = false;
+  isSeeking = true;
+  videoPlayer.currentTime = time;
+  isNotInAction = true;
+  console.log("Nhận Event Seek từ server đến thời điểm:", time);
+});
+
+socket.on("getSyncState", (data) => {
+  console.log(
+    `Server đã chọn máy bạn để yêu cầu trạng thái cho user ${data.requesterId}`
+  );
+  socket.emit("sendSyncState", {
+    requesterId: data.requesterId,
+    room: data.room,
+    time: videoPlayer.currentTime,
+    paused: videoPlayer.paused,
+  });
+});
+
+socket.on("syncState", (data) => {
+  isNotInAction = false;
+  isSeeking = true;
+  videoPlayer.currentTime = data.time;
+  if (data.paused) {
     videoPlayer.pause();
-    videoPlayer.currentTime = time; 
-    userTriggered = true;
+    isNotInAction = true;
+    isSeeking = false;
+  } else {
+    videoPlayer.play();
+  }
+  console.log("Nhận trạng thái từ server để đồng bộ phim:", data);
 });
 
-socket.on('seek', (time) => {
-    console.log('Nhận lệnh Seek từ server đến:', time);
-    userTriggered = false;
-    isSeeking = true; 
-    videoPlayer.currentTime = time;
-    isSeeking = false; 
-    userTriggered = true; 
-});
+socket.on("remoteTimeUpdate", (data) => {
+  const { senderId, time } = data;
+  const formattedTime = formatTime(time);
+  const elementId = `user-time-${senderId}`;
 
-socket.on('getSyncState', (data) => {
-    console.log(`Server yêu cầu trạng thái cho ${data.requesterId}`);
-    socket.emit('sendSyncState', {
-        requesterId: data.requesterId,
-        room: data.room,
-        time: videoPlayer.currentTime,
-        paused: videoPlayer.paused
-    });
-});
+  let userElement = userTimeElements[senderId];
 
-socket.on('syncState', (data) => {
-    console.log('Nhận trạng thái đồng bộ:', data);
-    userTriggered = false; 
-    isSeeking = true; 
-    videoPlayer.currentTime = data.time;
-    if (data.paused) {
-        videoPlayer.pause();
+  if (!userElement && otherUserTimesListDiv) {
+    userElement = document.getElementById(elementId);
+    if (!userElement) {
+      userElement = document.createElement("p");
+      userElement.id = elementId;
+      otherUserTimesListDiv.appendChild(userElement);
+      userTimeElements[senderId] = userElement;
     } else {
-        videoPlayer.addEventListener('seeked', () => {
-             if (!data.paused && !userTriggered) { 
-                 videoPlayer.play();
-                 userTriggered = true;
-                 isSeeking = false; 
-             }
-        }, { once: true }); 
+      userTimeElements[senderId] = userElement;
     }
-     if (data.paused) {
-         userTriggered = true;
-         isSeeking = false;
-     }
+  }
+
+  if (userElement) {
+    userElement.textContent = `User id ${senderId.substring(
+      0,
+      4
+    )} at time: ${formattedTime}`;
+  }
+});
+
+socket.on("userLeft", (userId) => {
+  console.log(`User với ID (${userId}) đã rời phòng.`);
+  const elementId = `user-time-${userId}`;
+  const userElement = userTimeElements[userId];
+
+  if (userElement) {
+    userElement.remove();
+    delete userTimeElements[userId];
+  } else {
+    const elementOnDom = document.getElementById(elementId);
+    if (elementOnDom) {
+      elementOnDom.remove();
+    }
+  }
 });
