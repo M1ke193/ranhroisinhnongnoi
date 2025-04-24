@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xem Phim Đồng Bộ</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; }
+        #videoPlayer { width: 80%; max-width: 800px; display: block; margin-bottom: 10px; }
+        #controls button { margin-right: 5px; padding: 5px 10px;}
+        #roomInfo { margin-bottom: 15px; }
+        label, input, button { margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Xem Phim Đồng Bộ</h1>
+
+    <div id="roomSelection">
+        <label for="videoUrl">URL Video:</label>
+        <input type="text" id="videoUrl" placeholder="Nhập URL video (ví dụ: .mp4)" value="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4">
+        <br>
+        <label for="roomName">Tên Phòng:</label>
+        <input type="text" id="roomName" placeholder="Nhập tên phòng">
+        <button id="joinRoomBtn">Tham Gia/Tạo Phòng</button>
+    </div>
+
+    <div id="videoContainer" style="display: none;">
+        <p id="roomInfo"></p>
+        <video id="videoPlayer" controls></video>
+        <p><i>Lưu ý: Hành động Play/Pause/Seek của bạn sẽ đồng bộ với người khác.</i></p>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="client.js"></script>
+</body>
+</html>

@@ -5,5 +5,10 @@
   "repository": "https://github.com/M1ke193/ranhroisinhnongnoi",
   "author": "NULL",
   "license": "UNLICENSED",
-  "private": true
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "express": "^5.1.0",
+    "socket.io": "^4.8.1"
+  }
 }
