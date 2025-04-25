@@ -27,6 +27,41 @@ let isNotInAction = true;
 let timeUpdateInterval = null;
 let fileURL = '';
 const userTimeElements = {};
+const skipTime = 5;
+
+//event for video button
+document.addEventListener('keydown', function (event) {
+    switch (event.code) {
+        case 'Space':
+            isNotInAction = false;
+            event.preventDefault();
+            if (videoPlayer.paused || videoPlayer.ended) {
+                videoPlayer.play();
+            } else {
+                videoPlayer.pause();
+            }
+            isNotInAction = true;
+            break;
+
+        case 'ArrowLeft':
+            isNotInAction = false;
+            videoPlayer.currentTime -= skipTime;
+            if (videoPlayer.currentTime < 0) {
+                videoPlayer.currentTime = 0;
+            }
+            isNotInAction = true;
+            break;
+
+        case 'ArrowRight':
+            isNotInAction = false;
+            videoPlayer.currentTime += skipTime;
+            if (videoPlayer.currentTime > videoPlayer.duration) {
+                videoPlayer.currentTime = videoPlayer.duration;
+            }
+            isNotInAction = true;
+            break;
+    }
+});
 
 videoInputFile.addEventListener('change', function(event) {
   const fileLocal = event.target.files[0];
