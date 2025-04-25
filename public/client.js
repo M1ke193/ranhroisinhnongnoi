@@ -1,4 +1,4 @@
-const socket = io("http://26.92.20.182:3333");
+const socket = io(window.location.href);
 const videoPlayer = document.getElementById("videoPlayer");
 const roomSelectionDiv = document.getElementById("roomSelection");
 const videoContainerDiv = document.getElementById("videoContainer");

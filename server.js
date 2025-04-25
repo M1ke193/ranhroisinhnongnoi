@@ -3,6 +3,7 @@ import http from "http";
 import { Server } from "socket.io";
 import path from "path";
 import { fileURLToPath } from "url";
+import config from "./config.json" with { type: 'json' }
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -15,7 +16,7 @@ const io = new Server(server, {
   },
 });
 
-const MOVIE_BE_PORT = process.env.MOVIE_BE_PORT || 3333;
+const MOVIE_BE_PORT = config.MOVIE_BE_PORT || 3333;
 
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -76,7 +77,7 @@ io.on("connection", (socket) => {
 
   socket.on("currentTimeUpdate", (data) => {
     socket.to(data.room).emit("remoteTimeUpdate", {
-      senderId: socket.id, 
+      senderId: socket.id,
       time: data.time,
     });
   });
