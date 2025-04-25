@@ -5,6 +5,7 @@ const videoContainerDiv = document.getElementById("videoContainer");
 const joinRoomBtn = document.getElementById("joinRoomBtn");
 const roomNameInput = document.getElementById("roomName");
 const videoUrlInput = document.getElementById("videoUrl");
+const videoInputFile = document.getElementById('videoInput');
 const roomInfoP = document.getElementById("roomInfo");
 const otherUserTimesListDiv = document.getElementById("otherUserTimesList");
 
@@ -24,15 +25,23 @@ let currentRoom = null;
 let isSeeking = false;
 let isNotInAction = true;
 let timeUpdateInterval = null;
+let fileURL = '';
 const userTimeElements = {};
+
+videoInputFile.addEventListener('change', function(event) {
+  const fileLocal = event.target.files[0];
+  if (fileLocal) {
+    fileURL = URL.createObjectURL(fileLocal);
+  }
+});
 
 joinRoomBtn.addEventListener("click", () => {
   const room = roomNameInput.value.trim();
-  const videoUrl = videoUrlInput.value.trim();
+  fileURL = fileURL || videoUrlInput.value.trim(); 
 
-  if (room && videoUrl) {
+  if (room && fileURL) {
     currentRoom = room;
-    videoPlayer.src = videoUrl;
+    videoPlayer.src = fileURL;
 
     roomSelectionDiv.style.display = "none";
     videoContainerDiv.style.display = "block";

@@ -12,9 +12,11 @@
     <h1>Xem Phim Cùng Nhau</h1>
 
     <div id="roomSelection">
+        <label for="videoInput">Local Video:</label>
+        <input type="file" id="videoInput" accept="video/*" placeholder="Sử dụng local video"/>
+        <br>
         <label for="videoUrl">URL Video:</label>
-        <input type="text" id="videoUrl" placeholder="Nhập URL video (có thể sử dụng local video)"
-            value="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4">
+        <input type="text" id="videoUrl" placeholder="Nhập URL video"/>
         <br>
         <label for="roomName">Room:</label>
         <input type="text" id="roomName" placeholder="Nhập Room">
