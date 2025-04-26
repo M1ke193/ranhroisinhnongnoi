@@ -23,7 +23,7 @@
     </div>
 
     <div id="videoContainer" style="display: none;">
-        <div class="room-info-wrapper">
+        <div class="room-info-wrapper" onclick="crollToEpisode()">
             <p id="roomInfo"></p>
         </div>
         <video id="videoPlayer" tabindex="0" controls controlslist="nodownload noremoteplayback noplaybackrate"></video>
@@ -40,6 +40,16 @@
             <h4>CÁC USER KHÁC:</h4>
             <div id="otherUserTimesList">
             </div>
+        </div>
+    </div>
+
+    <div id="serverMovieBrowser">
+        <hr>
+        <h1>Phim Từ Server:</h1>
+        <ul id="movie-list"></ul>
+        <div id="episode-container">
+            <h2 id="selected-movie-title"></h2>
+            <ul id="episode-list"></ul>
         </div>
     </div>
 
