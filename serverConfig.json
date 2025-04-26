@@ -1,3 +1,4 @@
 {
-    "MOVIE_BE_PORT": "3333"
+    "MOVIE_BE_PORT": "3333",
+    "MOVIE_FOLDER": "D:\\Movies"
 }
