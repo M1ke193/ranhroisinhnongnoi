@@ -163,6 +163,12 @@ io.on('connection', (socket) => {
             }
         });
     });
+    
+    socket.on('leaveRoom', (roomName) => {
+        socket.to(roomName).emit('userLeft', socket.id); 
+        socket.leave(roomName);
+        console.log(`User ${socket.id} rời phòng ${roomName}`);
+    });
 });
 
 server.listen(MOVIE_BE_PORT, () => {

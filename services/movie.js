@@ -33,7 +33,7 @@ export async function scanMoviesFile(movieName) {
         for (const mp4File of mp4Files) {
             movieListFile.push({
                 movieName: movieName,
-                //file: mp4File,
+                file: mp4File,
                 streamUrl: `/stream/${encodeURIComponent(
                     movieName
                 )}/${encodeURIComponent(mp4File)}`,
