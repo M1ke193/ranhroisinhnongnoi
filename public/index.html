@@ -10,34 +10,41 @@
 </head>
 
 <body>
-    <h1>Xem Phim Cùng Nhau</h1>
+    <h1 class="mainTitle">Xem Phim Cùng Nhau</h1>
 
     <div id="roomSelection">
         <label for="videoInput">Local Video:</label>
         <input type="file" id="videoInput" accept="video/*" placeholder="Sử dụng local video"/>
-        <br>
         <label for="videoUrl">URL Video:</label>
         <input type="text" id="videoUrl" placeholder="Nhập URL video"/>
-        <br>
         <label for="roomName">Room:</label>
         <input type="text" id="roomName" placeholder="Nhập Room">
         <button id="joinRoomBtn">Tham Gia/Tạo Phòng</button>
     </div>
 
     <div id="videoContainer" style="display: none;">
-        <p id="roomInfo"></p>
-        <video id="videoPlayer" width="640" height="360" controls></video>
+        <div class="room-info-wrapper">
+            <p id="roomInfo"></p>
+        </div>
+        <video id="videoPlayer" tabindex="0" controls controlslist="nodownload noremoteplayback noplaybackrate"></video>
         <p><i>Lưu ý: Hành động Play/Pause/Seek của bạn sẽ đồng bộ với người khác.</i></p>
-
+        <ul class="shortKey"> 
+            <i>Một số phím tắt:</i>
+            <li><strong>A </strong>Lùi về 10s</li>
+            <li><strong>D </strong>Tiến lên 10s</li>
+            <li><strong>S </strong>Dừng/Phát phim</li>
+            <li><strong>F </strong>Full screen</li>
+            <li><strong>M </strong>Khóa mõm</li>
+        </ul>
         <div id="otherUserTimesContainer">
-            <h4>Các user khác:</h4>
+            <h4>CÁC USER KHÁC:</h4>
             <div id="otherUserTimesList">
             </div>
         </div>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
-    <script src="client.js" defer></script>
+    <script src="client.js"></script>
 </body>
 
 </html>

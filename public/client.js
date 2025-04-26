@@ -27,38 +27,52 @@ let isNotInAction = true;
 let timeUpdateInterval = null;
 let fileURL = '';
 const userTimeElements = {};
-const skipTime = 5;
 
 //event for video button
 document.addEventListener('keydown', function (event) {
-    switch (event.code) {
-        case 'Space':
-            isNotInAction = false;
+    const skipTime = 10;
+    switch (event.key) {
+        case 's':
+            if (isNotInAction) {
+                event.preventDefault();
+                if (videoPlayer.paused || videoPlayer.ended) {
+                    videoPlayer.play();
+                } else {
+                    videoPlayer.pause();
+                }
+            }
+            break;
+
+        case 'a':
+            if (isNotInAction) {
+                event.preventDefault();
+                videoPlayer.currentTime -= skipTime;
+                if (videoPlayer.currentTime < 0) {
+                    videoPlayer.currentTime = 0;
+                }
+            }
+            break;
+
+        case 'd':
+            if (isNotInAction) {
+                event.preventDefault();
+                videoPlayer.currentTime += skipTime;
+                if (videoPlayer.currentTime > videoPlayer.duration) {
+                    videoPlayer.currentTime = videoPlayer.duration;
+                }
+            }
+            break;
+
+        case 'm':
             event.preventDefault();
-            if (videoPlayer.paused || videoPlayer.ended) {
-                videoPlayer.play();
-            } else {
-                videoPlayer.pause();
-            }
-            isNotInAction = true;
+            videoPlayer.muted = !videoPlayer.muted;
             break;
 
-        case 'ArrowLeft':
-            isNotInAction = false;
-            videoPlayer.currentTime -= skipTime;
-            if (videoPlayer.currentTime < 0) {
-                videoPlayer.currentTime = 0;
-            }
-            isNotInAction = true;
-            break;
-
-        case 'ArrowRight':
-            isNotInAction = false;
-            videoPlayer.currentTime += skipTime;
-            if (videoPlayer.currentTime > videoPlayer.duration) {
-                videoPlayer.currentTime = videoPlayer.duration;
-            }
-            isNotInAction = true;
+        case 'f':
+            event.preventDefault();
+            document.fullscreenElement
+                ? document.exitFullscreen()
+                : videoPlayer.requestFullscreen();
             break;
     }
 });
@@ -80,12 +94,13 @@ joinRoomBtn.addEventListener("click", () => {
 
     roomSelectionDiv.style.display = "none";
     videoContainerDiv.style.display = "block";
-    roomInfoP.textContent = `Bạn đang ở Room: ${currentRoom}`;
+    roomInfoP.textContent = `BẠN ĐANG Ở ROOM: ${currentRoom}`;
 
     socket.emit("joinRoom", currentRoom);
 
     setTimeout(() => {
       socket.emit("requestSync", { room: currentRoom });
+      videoPlayer.focus()
     }, 1000);
 
     if (timeUpdateInterval) {
@@ -180,7 +195,7 @@ socket.on("pause", (time) => {
 });
 
 socket.on("seek", (time) => {
-  if (Math.abs(videoPlayer.currentTime - time) < 0.5) {
+  if (Math.abs(videoPlayer.currentTime - time) < 1) {
     console.log("ESCAPE FROM TARLOOP");
     return;
   }
