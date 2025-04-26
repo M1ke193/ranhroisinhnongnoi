@@ -13,6 +13,10 @@
   },
   "scripts": {
     "start": "node server.js",
-    "encodeMovie": "node encodeMovie.cjs"
+    "encodeMovie": "node encodeMovie.cjs",
+    "dev": "nodemon server.js"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
   }
 }
