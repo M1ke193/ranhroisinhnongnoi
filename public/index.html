@@ -6,7 +6,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Xem Phim Cùng Nhau</title>
+    <link href="color.css" rel="stylesheet" type="text/css">
     <link href="index.css" rel="stylesheet" type="text/css">
+    <link href="dark.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
@@ -20,6 +22,31 @@
         <label for="roomName">Room:</label>
         <input type="text" id="roomName" placeholder="Nhập Room">
         <button id="joinRoomBtn">Tham Gia/Tạo Phòng</button>
+    </div>
+
+    <div class="settings-container">
+        <button id="settings-button" class="settings-button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path
+                    d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09A1.65 1.65 0 0 0 9 3.09V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.09a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z">
+                </path>
+            </svg>
+        </button>
+    
+        <div id="settings-popup" class="popup">
+            <div class="settings-box">
+                <div class="darkmode-setting">
+                    <span class="toggle-status light">LIGHT</span>
+                    <label class="switch">
+                        <input type="checkbox" id="darkmode-switch">
+                        <span class="slider round"></span>
+                    </label>
+                    <span class="toggle-status dark">DARK</span>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div id="videoContainer" style="display: none;">

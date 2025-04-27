@@ -1,5 +1,7 @@
 const serverHost = window.location.href.replace(/\/$/, '');
 const socket = io(serverHost);
+
+const bodyElement = document.body;
 const videoPlayer = document.getElementById('videoPlayer');
 const roomSelectionDiv = document.getElementById('roomSelection');
 const videoContainerDiv = document.getElementById('videoContainer');
@@ -16,6 +18,12 @@ const episodeContainerEl = document.getElementById('episode-container');
 const episodeListEl = document.getElementById('episode-list');
 const selectedMovieTitleEl = document.getElementById('selected-movie-title');
 // Kết thúc Elements cho phần duyệt phim server
+
+// Elements cho phần setting
+const settingsButton = document.getElementById('settings-button');
+const settingsPopup = document.getElementById('settings-popup');
+const darkModeSwitch = document.getElementById('darkmode-switch');
+// Kết thúc Elements cho phần setting
 
 function formatTime(totalSeconds) {
     if (isNaN(totalSeconds) || totalSeconds < 0) {
@@ -37,6 +45,8 @@ let fileURL = '';
 const userTimeElements = {};
 let movies = {};
 let currentSelectedEpisodeLi = null;
+//this make sure that everyone in the room will be in sync with the new joiner, there will be a flicker (TODO: it can be setting)
+let isFirstSync = false; 
 
 //event for video button
 document.addEventListener('keydown', async function (event) {
@@ -100,13 +110,13 @@ joinRoomBtn.addEventListener('click', () => {
     handleJoinRomm(room, fileURL);
 });
 
-const handleJoinRomm = (room, fileURL) => {
-    if (room && fileURL) {
+const handleJoinRomm = (room, streamURL) => {
+    if (room && streamURL) {
         if (currentRoom !== room) {
             socket.emit('leaveRoom', currentRoom);
             currentRoom = room;
         }
-        videoPlayer.src = fileURL;
+        videoPlayer.src = streamURL;
         roomSelectionDiv.style.display = 'none';
         videoContainerDiv.style.display = 'block';
         roomInfoP.textContent = `BẠN ĐANG Ở ROOM: ${currentRoom}`;
@@ -141,7 +151,7 @@ const handleJoinRomm = (room, fileURL) => {
 };
 
 videoPlayer.addEventListener('play', () => {
-    if (isNotInAction) {
+    if (isNotInAction || isFirstSync) {
         const currentTime = videoPlayer.currentTime;
         socket.emit('play', { room: currentRoom, time: currentTime });
         console.log('Emit event Play');
@@ -176,19 +186,11 @@ socket.on('connect', () => {
     console.log('Đã kết nối tới server Socket.IO:', socket.id);
 });
 
-socket.on('reconnect', () => {
-    alert('Đã kết nối lại server!');
-    if (room && fileURL) {
-        console.log(`Đang join lại vào room ${room}`);
-        handleJoinRomm(room, fileURL);
-    }
-});
-
 socket.on('disconnect', () => {
     alert('Mất kết nối tới server!');
-    // roomSelectionDiv.style.display = 'block';
-    // videoContainerDiv.style.display = 'none';
-    //currentRoom = null;
+    roomSelectionDiv.style.display = 'block';
+    videoContainerDiv.style.display = 'none';
+    currentRoom = null;
     isSeeking = false;
     isNotInAction = true;
 });
@@ -250,15 +252,15 @@ socket.on('getSyncState', (data) => {
 
 socket.on('syncState', async (data) => {
     isNotInAction = false;
-    isSeeking = true;
     videoPlayer.currentTime = data.time;
     if (data.paused) {
         await videoPlayer.pause();
     } else {
+        isFirstSync = true;
         await videoPlayer.play();
     }
     isNotInAction = true;
-    isSeeking = false;
+    isFirstSync = false;
     console.log('Nhận trạng thái từ server để đồng bộ phim:', data);
 });
 
@@ -368,7 +370,10 @@ function handleEpisodeClick(event) {
     const episodeTitle = selectedEpisodes.dataset.episodeTitle;
 
     const absoluteStreamUrl = serverHost + relativeStreamUrl;
-    handleJoinRomm(episodeTitle, absoluteStreamUrl);
+
+    if (absoluteStreamUrl !== videoPlayer.src || currentRoom !== episodeTitle) {
+        handleJoinRomm(episodeTitle, absoluteStreamUrl);
+    }
 
     window.scrollTo({
         top: 0,
@@ -414,11 +419,67 @@ function crollToEpisode() {
             .scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 }
-// === Initialization Movie===
+// setting part
+function togglePopup() {
+    settingsPopup.classList.toggle('show');
+}
+
+function applyDarkMode(isDark) {
+    if (isDark) {
+        bodyElement.classList.add('dark-mode');
+    } else {
+        bodyElement.classList.remove('dark-mode');
+    }
+    darkModeSwitch.checked = isDark;
+}
+
+function updateToggleStatus() {
+    const isDarkModeEnabled = darkModeSwitch.checked;
+    applyDarkMode(isDarkModeEnabled);
+    try {
+        localStorage.setItem('darkMode', isDarkModeEnabled);
+    } catch (e) {
+        console.error(
+            `Không thể lưu thiết lập Dark Mode vào localStorage: ${e.message}`
+        );
+    }
+}
+
+settingsButton.addEventListener('click', function(event) {
+    event.stopPropagation();
+    togglePopup();
+});
+
+document.addEventListener('click', function(event) {
+    if (settingsPopup.classList.contains('show') &&
+        !settingsPopup.contains(event.target) &&
+        !settingsButton.contains(event.target)) {
+        togglePopup(); 
+    }
+});
+
+darkModeSwitch.addEventListener('change', updateToggleStatus);
+
+// === Initialization ===
+// Movie
 async function initializeMovieBrowser() {
     await fetchMovies();
     displayMovieTitle();
 }
 
-// Duyệt phim khi trang tải xong
-document.addEventListener('DOMContentLoaded', initializeMovieBrowser);
+//dark mode
+async function initializeDarkMode() {
+    let savedDarkMode = false; 
+    try {
+        savedDarkMode = localStorage.getItem('darkMode') === 'true';
+    } catch (e) {
+        console.error(`Lỗi Khi đọc thiết lập Dark Mode từ localStorage: ${e.message}`);
+    }
+    applyDarkMode(savedDarkMode);
+}
+
+// Initialization khi trang tải xong
+document.addEventListener('DOMContentLoaded', () => {
+    initializeDarkMode();
+    initializeMovieBrowser();
+});

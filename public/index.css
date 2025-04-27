@@ -1,110 +1,95 @@
 body {
-    font-family: sans-serif;
+    font-family: var(--font-body);
     margin: 20px;
-    background-color: #f4f4f4;
+    background-color: var(--clr-background-body);
 }
 
-.ád {
-    font-family: sans-serif;
-    line-height: 1.6;
-    margin: 20px;
-    background-color: #f4f4f4;
-    display: flex;
-    flex-direction: column;
-    align-items: center; 
-}
-
-/* Styles cho phần xem phim */
-
-#videoContainer { 
+/* --- Styles cho phần xem phim --- */
+#videoContainer {
     display: block;
-    max-width: 850px; 
-    margin: 30px auto; 
-    padding: 10px 25px 25px; 
-    background-color: #ffffff; 
-    border: 1px solid #ddd; 
-    border-radius: 10px; 
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); 
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; /* Font hệ thống */
+    max-width: 850px;
+    margin: 30px auto;
+    padding: 10px 25px 25px;
+    background-color: var(--clr-background-card);
+    border: 1px solid var(--clr-border-light);
+    border-radius: 10px;
+    box-shadow: 0 6px 15px var(--shadow-light);
+    font-family: var(--font-primary);
+    color: var(--clr-text-primary);
 }
+
 .room-info-wrapper {
     cursor: pointer;
-    text-align: center; 
+    text-align: center;
 }
 
 #roomInfo {
-    display: inline-block; 
+    display: inline-block;
     font-size: 1.15em;
     font-weight: 500;
-    color: #2a2a2a;
-    background-color: #e9ecef; 
+    color: var(--clr-text-primary);
+    background-color: var(--clr-background-gray);
     padding: 10px 18px;
     border-radius: 6px;
-    border: 1px solid #dee2e6;
+    border: 1px solid var(--clr-border-gray-light);
 }
 
 #videoPlayer {
-    display: block; 
-    width: 100%; 
-    max-width: 100%; 
-    height: auto; 
-    margin-bottom: 15px; 
-    background-color: #000000; 
-    border-radius: 5px; 
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 15px;
+    background-color: var(--clr-background-video);
+    border-radius: 5px;
 }
 
 #otherUserTimesContainer {
     margin-top: 35px;
-    padding-top: 25px; 
-    border-top: 1px dashed #ced4da; 
-  }
-  
-  #otherUserTimesContainer h4 {
+    padding-top: 25px;
+    border-top: 1px dashed var(--clr-border-dashed);
+}
+
+#otherUserTimesContainer h4 {
     margin-top: 0;
     margin-bottom: 15px;
-    color: #495057; 
+    color: var(--clr-text-primary);
     font-weight: 600;
     font-size: 1.1em;
-  }
-  
-  #otherUserTimesList {
-    background-color: #f8f9fa;
-    border: 1px solid #e9ecef;
+}
+
+#otherUserTimesList {
+    background-color: var(--clr-background-gray);
+    border: 1px solid var(--clr-border-key);
     border-radius: 5px;
     padding: 15px;
-    min-height: 60px; 
-    color: #495057; 
+    min-height: 60px;
+    color: var(--clr-text-primary);
     font-size: 0.9em;
-    line-height: 1.6; 
-  }
+    line-height: 1.6;
+}
 
 #controls button {
     margin-right: 5px;
     padding: 5px 10px;
 }
 
-#otherUserTimesContainer {
-    margin-top: 20px;
-    border: 1px solid #ccc;
-    padding: 10px;
-}
-
 .shortKey {
     list-style: none;
     padding: 15px 20px;
     margin: 20px 0;
-    background-color: #f9f9f9;
-    border: 1px solid #e0e0e0;
+    background-color: var(--clr-background-muted);
+    border: 1px solid var(--clr-border-gray-light);
     border-radius: 8px;
     max-width: 350px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 5px var(--shadow-key);
 }
 
 .shortKey i {
     display: block;
     margin-bottom: 12px;
     font-style: italic;
-    color: #666;
+    color: var(--clr-text-muted);
     font-size: 0.9em;
 }
 
@@ -113,7 +98,7 @@ body {
     display: flex;
     align-items: center;
     font-size: 0.95em;
-    color: #333;
+    color: var(--clr-text-muted);
 }
 
 .shortKey li:last-child {
@@ -122,39 +107,37 @@ body {
 
 .shortKey li strong {
     display: inline-block;
-    background-color: #e7e7e7;
-    border: 1px solid #ccc;
+    background-color: var(--clr-button-key-bg);
+    border: 1px solid var(--clr-border-key);
     border-bottom-width: 2px;
     border-radius: 4px;
     padding: 3px 8px;
     margin-right: 12px;
-    font-family: Consolas, 'Courier New', Courier, monospace;
+    font-family: var(--font-code);
     font-size: 0.9em;
-    color: #222;
+    color: var(--clr-text-primary);
     min-width: 25px;
     text-align: center;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 1px var(--shadow-key-inner);
 }
 
-/* Kết thúc Styles cho phần xem phim */
-
-/* Styles cho phần phim room selection */
-
+/* --- Styles cho phần phim room selection --- */
 #roomSelection {
     max-width: 450px;
     margin: 40px auto;
     padding: 25px 30px;
-    background-color: #ffffff;
-    border: 1px solid #e0e0e0;
+    background-color: var(--clr-background-card);
+    border: 1px solid var(--clr-border-gray-light);
     border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    box-shadow: 0 5px 15px var(--shadow-light);
+    font-family: var(--font-primary);
+    color: var(--clr-text-primary)
 }
 
 #roomSelection label {
     display: block;
     font-weight: 500;
-    color: #444;
+    color: var(--clr-text-muted);
     font-size: 0.95em;
     margin-bottom: 6px;
 }
@@ -164,25 +147,24 @@ body {
     display: block;
     width: 100%;
     padding: 12px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--clr-border-light);
     border-radius: 5px;
     box-sizing: border-box;
     font-size: 1em;
-    color: #333;
+    color: var(--clr-text-muted);
     margin-bottom: 5px;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-
 #roomSelection input[type="text"]:focus,
 #roomSelection input[type="file"]:focus {
     outline: none;
-    border-color: #7401c0;
-    box-shadow: 0 0 0 3px rgba(255, 89, 205, 0.2);
+    border-color: var(--clr-border-selected-item);
+    box-shadow: 0 0 0 3px var(--clr-focus-ring-inner);
 }
 
 #roomSelection input[type="file"] {
-    color: #555;
+    color: var(--clr-text-muted);
 }
 
 #joinRoomBtn {
@@ -190,8 +172,8 @@ body {
     width: 100%;
     padding: 14px;
     margin-top: 20px;
-    background-color: #9d4ba0;
-    color: white;
+    background-color: var(--clr-button-primary-bg);
+    color: var(--clr-background-toggle-handle);
     border: none;
     border-radius: 5px;
     font-size: 1.1em;
@@ -201,79 +183,222 @@ body {
 }
 
 #joinRoomBtn:hover {
-    background-color: #8c388f;
+    background-color: var(--clr-button-primary-hover-bg);
 }
 
 #joinRoomBtn:active {
-    background-color: #850085;
+    background-color: var(--clr-button-primary-active-bg);
     transform: scale(0.99);
 }
 
-
 .mainTitle {
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--font-title);
     font-size: 3.2em;
     font-weight: 700;
     text-align: center;
     margin: 30px 0 40px 0;
-    background: linear-gradient(45deg, #d0ff00, #d400ff);
+    background: linear-gradient(45deg, var(--clr-gradient-start), var(--clr-gradient-end));
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
     letter-spacing: 0.5px;
 }
 
-/* Kết thúc Styles cho phần phim room selection */
-
- /* Styles cho phần phim server */
-
- #serverMovieBrowser{
+/* --- Styles cho phần phim server --- */
+#serverMovieBrowser {
     text-align: center;
     padding: 20px 50px 20px;
- }
+}
 
- #serverMovieBrowser hr {
-    margin-bottom: 35;
- }
+#serverMovieBrowser hr {
+    margin-bottom: 35px;
+}
 
- #serverMovieBrowser h1, #serverMovieBrowser h2 {
-    font-family: 'Montserrat', sans-serif;
+#serverMovieBrowser h1,
+#serverMovieBrowser h2 {
+    font-family: var(--font-title);
     font-weight: 700;
     text-align: center;
-    background: linear-gradient(45deg, #d0ff00, #d400ff);
+    background: linear-gradient(45deg, var(--clr-gradient-start), var(--clr-gradient-end));
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
     letter-spacing: 0.5px;
 }
-#movie-list, #episode-list {
-   list-style: none;
-   padding: 0;
-   max-height: 300px; 
-   overflow-y: auto; 
-   border: 1px solid #eee;
-   margin-top: 10px;
+
+#serverMovieBrowser h2 {
+    margin-top: 0px;
 }
-#movie-list li, #episode-list li {
-    background-color: #f9f9f9;
+
+#movie-list,
+#episode-list {
+    list-style: none;
+    padding: 0;
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid var(--clr-border-white);
+    margin-top: 10px;
+    color: var(--clr-text-primary)
+}
+
+#movie-list li,
+#episode-list li {
+    background-color: var(--clr-background-muted);
     margin-bottom: 5px;
     padding: 10px 12px;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.2s ease;
-    border: 1px solid #ddd;
+    border: 1px solid var(--clr-border-light);
 }
-#movie-list li:hover, #episode-list li:hover {
-    background-color: #e9e9e9;
+
+#movie-list li {
+    font-weight: 700;
+}
+
+#episode-list li {
+    font-style: italic;
+}
+
+#movie-list li:hover,
+#episode-list li:hover {
+    background-color: var(--clr-background-hover-item-light);
 }
 
 #episode-list li.selected {
-    background-color: #f4ceff; 
-    border-color: #e4a1f5;
+    background-color: var(--clr-focus-ring-inner);
+    border-color: var(--clr-border-selected-item);
     font-weight: bold;
 }
+
 #episode-container {
-   padding-top: 15px;
-   border-top: 1px solid #eee;
+    padding-top: 15px;
 }
- /* Kết thúc Styles cho phần phim server */
+
+/* --- Styles cho phần setting --- */
+.settings-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.settings-button svg {
+    color: var(--clr-text-primary);
+}
+
+.settings-button {
+    background-color: var(--clr-background-gray);
+    border: 1px solid var(--clr-border-light);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s;
+}
+
+.settings-button:hover {
+    background-color: var(--clr-background-gray-hover-dark);
+}
+
+.popup {
+    display: none;
+    position: absolute;
+    top: 50px;
+    right: 0;
+    width: 200px;
+    background-color: var(--clr-background-card);
+    border: 1px solid var(--clr-border-gray-light);
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 4px 8px var(--shadow-light);
+    z-index: 1001;
+    color: var(--clr-text-primary);
+}
+
+.popup.show {
+    display: block;
+}
+
+.popup .settings-box {
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+}
+
+.popup .settings-box .darkmode-setting {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+}
+
+.toggle-status {
+    vertical-align: middle;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.light {
+    color: var(--clr-text-toggle-light);
+}
+
+.dark {
+    color: var(--clr-text-toggle-dark);
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+    vertical-align: middle;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--clr-border-key);
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: var(--clr-background-toggle-handle);
+    transition: .4s;
+}
+
+input:checked+.slider {
+    background-color: var(--clr-background-toggle-on);
+}
+
+input:checked+.slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 24px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}

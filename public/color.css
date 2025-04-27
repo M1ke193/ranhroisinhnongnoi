@@ -1,0 +1,42 @@
+:root {
+    --clr-background-body: #f4f4f4;
+    --clr-background-card: #ffffff;
+    --clr-background-video: #000000;
+    --clr-background-muted: #f9f9f9;
+    --clr-background-toggle-on: #1b2f70;
+    --clr-background-toggle-handle: white;
+    --clr-background-hover-item-light: #e9e9e9;
+    --clr-background-gray: #e6e5e5;
+    --clr-background-gray-hover-dark: #d0d0d0;
+
+    --clr-text-primary: #2a2a2a;
+    --clr-text-muted: #666;
+    --clr-text-toggle-light: #8f652f;
+    --clr-text-toggle-dark: #6d3685;
+
+    --clr-border-light: #ddd;
+    --clr-border-white: white;
+    --clr-border-dashed: #ced4da;
+    --clr-border-gray-light: #e0e0e0;
+    --clr-border-selected-item: #e4a1f5;
+    --clr-border-key: #ccc;
+
+    --clr-button-primary-bg: #9d4ba0;
+    --clr-button-primary-hover-bg: #8c388f;
+    --clr-button-primary-active-bg: #850085;
+    --clr-button-key-bg: #e7e7e7;
+
+    --clr-focus-ring-inner: rgba(255, 89, 205, 0.2);
+
+    --clr-gradient-start: #d0ff00;
+    --clr-gradient-end: #d400ff;
+
+    --shadow-light: rgba(0, 0, 0, 0.1);
+    --shadow-key: rgba(0, 0, 0, 0.05);
+    --shadow-key-inner: rgba(0, 0, 0, 0.1);
+
+    --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    --font-title: 'Montserrat', sans-serif;
+    --font-code: Consolas, 'Courier New', Courier, monospace;
+    --font-body: sans-serif;
+}

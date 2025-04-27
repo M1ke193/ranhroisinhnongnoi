@@ -1,0 +1,25 @@
+body.dark-mode {
+    --clr-background-body: #1a1a1a;
+    --clr-background-card: #2c2c2c;
+    --clr-text-primary: #c9c8c8;
+    --clr-border-light: #444444;
+    --clr-border-gray-light: #3a3a3a;
+    --clr-background-muted: #333333;
+    --clr-button-key-bg: #555555;
+    --clr-text-muted: #c9c8c8;
+    --clr-background-gray: #252525;
+    --clr-background-gray-hover-dark: #132133;
+    --clr-background-hover-item-light: #132133;
+    --clr-border-white: #cecdcd;
+    --clr-border-selected-item: #4f8ab5;
+    --clr-button-primary-bg: #192e58;
+    --clr-button-primary-hover-bg: #0f284d; 
+    --clr-button-primary-active-bg: #0b1d3d;
+    --clr-button-key-bg: #2f4f77; 
+    --clr-focus-ring-inner: rgba(56, 128, 255, 0.3); 
+}
+
+body.dark-mode input[type="text"],
+body.dark-mode input[type="file"] {
+    background-color: var(--clr-background-muted);
+}
