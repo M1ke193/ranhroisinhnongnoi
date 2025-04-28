@@ -192,6 +192,7 @@ body {
 }
 
 .mainTitle {
+    cursor: pointer;
     font-family: var(--font-title);
     font-size: 3.2em;
     font-weight: 700;

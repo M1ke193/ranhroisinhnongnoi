@@ -2,13 +2,17 @@ const serverHost = window.location.href.replace(/\/$/, '');
 const socket = io(serverHost);
 
 const bodyElement = document.body;
-const videoPlayer = document.getElementById('videoPlayer');
-const roomSelectionDiv = document.getElementById('roomSelection');
-const videoContainerDiv = document.getElementById('videoContainer');
+
+// Elements cho phần join room
 const joinRoomBtn = document.getElementById('joinRoomBtn');
 const roomNameInput = document.getElementById('roomName');
 const videoUrlInput = document.getElementById('videoUrl');
 const videoInputFile = document.getElementById('videoInput');
+
+// Elements cho phần xem phim
+const videoPlayer = document.getElementById('videoPlayer');
+const roomSelectionDiv = document.getElementById('roomSelection');
+const videoContainerDiv = document.getElementById('videoContainer');
 const roomInfoP = document.getElementById('roomInfo');
 const otherUserTimesListDiv = document.getElementById('otherUserTimesList');
 
@@ -42,11 +46,11 @@ let isSeeking = false;
 let isNotInAction = true;
 let timeUpdateInterval = null;
 let fileURL = '';
-const userTimeElements = {};
+let userTimeElements = {};
 let movies = {};
 let currentSelectedEpisodeLi = null;
 //this make sure that everyone in the room will be in sync with the new joiner, there will be a flicker (TODO: it can be setting)
-let isFirstSync = false; 
+let isFirstSync = false;
 
 //event for video button
 document.addEventListener('keydown', async function (event) {
@@ -188,12 +192,51 @@ socket.on('connect', () => {
 
 socket.on('disconnect', () => {
     alert('Mất kết nối tới server!');
+    reset();
+});
+
+const goBackJoinRoom = () => {
+    socket.emit('leaveRoom', currentRoom);
+    reset();
+};
+
+const reset = () => {
+    resetRoom();
+    resetVideo();
+    resetUserTime();
+};
+
+const resetRoom = () => {
     roomSelectionDiv.style.display = 'block';
     videoContainerDiv.style.display = 'none';
     currentRoom = null;
     isSeeking = false;
     isNotInAction = true;
-});
+    fileURL = true;
+};
+
+const resetUserTime = () => {
+    if (timeUpdateInterval) {
+        clearInterval(timeUpdateInterval);
+        timeUpdateInterval = null;
+    }
+
+    for (const key in userTimeElements) {
+        const domElement = userTimeElements[key];
+
+        if (domElement) {
+            domElement.remove();
+        }
+        userTimeElements = {};
+    }
+};
+
+const resetVideo = () => {
+    videoPlayer.pause();
+    videoPlayer.removeAttribute('src');
+    videoPlayer.src = '';
+    videoPlayer.load();
+};
 
 socket.on('userJoined', (userId) => {
     console.log(`User với ID (${userId}) đã tham gia phòng.`);
@@ -445,16 +488,18 @@ function updateToggleStatus() {
     }
 }
 
-settingsButton.addEventListener('click', function(event) {
+settingsButton.addEventListener('click', function (event) {
     event.stopPropagation();
     togglePopup();
 });
 
-document.addEventListener('click', function(event) {
-    if (settingsPopup.classList.contains('show') &&
+document.addEventListener('click', function (event) {
+    if (
+        settingsPopup.classList.contains('show') &&
         !settingsPopup.contains(event.target) &&
-        !settingsButton.contains(event.target)) {
-        togglePopup(); 
+        !settingsButton.contains(event.target)
+    ) {
+        togglePopup();
     }
 });
 
@@ -469,11 +514,13 @@ async function initializeMovieBrowser() {
 
 //dark mode
 async function initializeDarkMode() {
-    let savedDarkMode = false; 
+    let savedDarkMode = false;
     try {
         savedDarkMode = localStorage.getItem('darkMode') === 'true';
     } catch (e) {
-        console.error(`Lỗi Khi đọc thiết lập Dark Mode từ localStorage: ${e.message}`);
+        console.error(
+            `Lỗi Khi đọc thiết lập Dark Mode từ localStorage: ${e.message}`
+        );
     }
     applyDarkMode(savedDarkMode);
 }
