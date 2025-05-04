@@ -163,12 +163,16 @@ videoPlayer.addEventListener('play', () => {
 });
 
 videoPlayer.addEventListener('pause', () => {
+    emitPauseEvent()
+});
+
+const emitPauseEvent = () => {
     if (!isSeeking && isNotInAction) {
         const currentTime = videoPlayer.currentTime;
         socket.emit('pause', { room: currentRoom, time: currentTime });
         console.log('Emit event Pause');
     }
-});
+};
 
 videoPlayer.addEventListener('seeking', () => {
     if (isNotInAction) {
@@ -243,6 +247,7 @@ socket.on('userJoined', (userId) => {
     if (!userTimeElements[userId] && otherUserTimesListDiv) {
         const elementId = `user-time-${userId}`;
         const userElement = document.createElement('p');
+        userElement.addEventListener('click', emitPauseEvent)
         userElement.id = elementId;
         userElement.textContent = `User ${userId.substring(
             0,
@@ -318,6 +323,7 @@ socket.on('remoteTimeUpdate', (data) => {
         userElement = document.getElementById(elementId);
         if (!userElement) {
             userElement = document.createElement('p');
+            userElement.addEventListener('click', emitPauseEvent)
             userElement.id = elementId;
             otherUserTimesListDiv.appendChild(userElement);
             userTimeElements[senderId] = userElement;

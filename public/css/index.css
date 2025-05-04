@@ -69,6 +69,16 @@ body {
     line-height: 1.6;
 }
 
+#otherUserTimesList p {
+    cursor: pointer;
+    display: inline-block;
+}
+
+#otherUserTimesList p:hover {
+    color: rgb(34, 134, 241);
+    text-decoration: underline;
+}
+
 #controls button {
     margin-right: 5px;
     padding: 5px 10px;
